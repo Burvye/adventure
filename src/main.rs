@@ -3,6 +3,8 @@ mod hero;
 use bevy::prelude::*;
 use avian3d::prelude::*;
 
+use crate::hero::hero_main::Hero;
+
 fn main() -> AppExit {
     App::new().add_plugins((DefaultPlugins, MainPlugin)).run()
 }
@@ -14,13 +16,14 @@ impl Plugin for MainPlugin {
         app.add_plugins(PhysicsPlugins::default());
         app.add_systems(Startup, build_world);
         app.add_systems(Update, hero::hero_main::update_input);
+        app.add_systems(Update, tick);
     }
 }
 
 fn build_world(
     mut cmds: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
+    mut materials: ResMut<Assets<StandardMaterial>>
 ) {
     // player
     cmds.spawn((
@@ -29,6 +32,7 @@ fn build_world(
         Collider::capsule(0.5, 1.8),
         LockedAxes::ROTATION_LOCKED,
         RigidBody::Dynamic,
+        Hero { forward: 0.0, right: 0.0 },
     ));
 
     // cube
@@ -57,4 +61,10 @@ fn build_world(
         },
         Transform::from_xyz(4.0, 8.0, 4.0),
     ));
+}
+
+fn tick(query: Query<&Hero>) {
+    for hero in query {
+        println!("Hero forward {:?} and right {:?}", &hero.forward, &hero.right);
+    }
 }
