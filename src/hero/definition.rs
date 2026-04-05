@@ -54,7 +54,7 @@ pub fn spawn_hero(
         Collider::capsule(0.5, 1.8),
         LockedAxes::ROTATION_LOCKED,
         RigidBody::Dynamic,
-        WantMove { zinput: 0, xinput: 0, jump: false , forward: Vec3 { x: 0.0, y: 0.0, z: 0.0 }},
+        WantMove { zinput: 0, xinput: 0, jump: false, forward: Vec3::ZERO },
         hero::definition::Hero {
             paused: true,
             sens: Vec2 { x: 0.01, y: 0.01 },
