@@ -1,0 +1,11 @@
+Model Information:
+* title:	LOWPOLY | MAP | ASSET | by ResoForge
+* source:	https://sketchfab.com/3d-models/lowpoly-map-asset-by-resoforge-e766d489a6c349c8a8ec9a994b1f87b1
+* author:	ResoForge (https://sketchfab.com/resoforge)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "LOWPOLY | MAP | ASSET | by ResoForge" (https://sketchfab.com/3d-models/lowpoly-map-asset-by-resoforge-e766d489a6c349c8a8ec9a994b1f87b1) by ResoForge (https://sketchfab.com/resoforge) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

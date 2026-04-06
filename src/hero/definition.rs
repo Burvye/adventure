@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use avian3d::prelude::*;
 use avian3d::math::*;
 
-use crate::WantMove;
+use crate::motion::definition::WantMove;
 use crate::hero;
 
 /// A tag to identify the singular hero. Every player is a hero in their own instance.
@@ -13,9 +13,9 @@ pub struct Hero {
     pub paused: bool,
     /// Mouse sensitivity of the hero.
     pub sens: Vec2,
-    /// Pitch rotation value of the hero to be applied to HeroCamera
+    /// Pitch rotation value of the hero to be applied to HeroCamera.
     pub pitch: f32,
-    /// Yaw rotation value of the hero to be applied to HeroCamera
+    /// Yaw rotation value of the hero to be applied to HeroCamera.
     pub yaw: f32,
 }
 /// Tag the camera
@@ -41,8 +41,20 @@ pub fn spawn_hero(
                 children![(
                     Mesh3d(meshes.add(Cuboid::new(0.5, 0.5, 0.5))),
                     MeshMaterial3d(materials.add(Color::srgb_u8(255, 55, 0))),
-                    Transform::from_xyz(0.0, 0.0, 10.0).looking_at(Vec3::Z, Vec3::Y),
-                )],
+                    Transform::from_xyz(1.0, 0.0, -2.0).looking_at(Vec3::Z, Vec3::Y),
+                ),
+                (
+                    SpotLight {
+                        inner_angle: 0.25,
+                        outer_angle: 0.5,
+                        range: 200.0,
+                        intensity: 5_000_000.0, // readible 5 million
+                        shadows_enabled: true,
+                        ..default()
+                    },
+                    Transform::default(),
+                )
+                ],
             ),
             (
                 HeroBody,

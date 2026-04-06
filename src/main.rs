@@ -6,11 +6,8 @@ mod ui;
 use bevy::prelude::*;
 use avian3d::prelude::*;
 
-// TODO: Debug, remove later along with "tick" function
-use crate::motion::definition::WantMove;
-
 fn main() -> AppExit {
-    App::new().add_plugins((DefaultPlugins, MainPlugin, SidePlugin)).run()
+    App::new().add_plugins((DefaultPlugins, MainPlugin)).run()
 }
 
 /// The bare minimum essential functions to run this game.
@@ -28,21 +25,5 @@ impl Plugin for MainPlugin {
             ui::input::toggle_pause,
             motion::movement::move_all
         ));
-    }
-}
-
-/// Non-essential stuff that can be removed and the game would still function well.
-pub struct SidePlugin;
-impl Plugin for SidePlugin {
-    fn build(&self, app: &mut App) {
-        app.add_systems(Update, tick); // TODO: Debug, remove later
-    }
-}
-
-// TODO: Debug, remove later
-/// Function to debug and test some random stuff.
-fn tick(query: Query<&WantMove>) {
-    for mover in query {
-        println!("Hero forward {:?} and right {:?}", &mover.zinput, &mover.xinput);
     }
 }

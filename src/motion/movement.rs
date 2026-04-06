@@ -20,7 +20,7 @@ pub fn move_all(query: Query<(&mut WantMove, &mut LinearVelocity)>) {
     }
 }
 /// Gives you a local horizontal movement vector.
-fn move_local(desire: &WantMove) -> Vec3 {
-    desire.forward * (desire.zinput as f32) +
-        Vec3::new(-desire.forward.z, 0.0, desire.forward.x) * (desire.xinput as f32)
+fn move_local(want_move: &WantMove) -> Vec3 {
+    want_move.forward * (want_move.zinput as f32) +
+        Vec3::new(-want_move.forward.z, 0.0, want_move.forward.x) * (want_move.xinput as f32)
 }

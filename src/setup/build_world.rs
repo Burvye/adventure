@@ -7,7 +7,8 @@ use crate::hero;
 pub fn build_lobby(
     mut cmds: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>
+    mut materials: ResMut<Assets<StandardMaterial>>,
+    asset_server: Res<AssetServer>,
 ) {
     // "hero"
     hero::definition::spawn_hero(&mut cmds, &mut meshes, &mut materials);
@@ -17,26 +18,17 @@ pub fn build_lobby(
     cmds.spawn((
         Mesh3d(meshes.add(Cuboid::new(1.0, 1.0, 1.0))),
         MeshMaterial3d(materials.add(Color::srgb_u8(255, 102, 0))),
-        Transform::from_xyz(0.0, 5.0, 0.0),
+        Transform::from_xyz(0.0, 10.0, 0.0),
         Collider::cuboid(1.0, 1.0, 1.0),
         RigidBody::Dynamic,
     ));
 
-    // ground
+    // fps map
     cmds.spawn((
-        Mesh3d(meshes.add(Cuboid::new(50.0, 0.5, 50.0))),
-        MeshMaterial3d(materials.add(Color::srgb_u8(60, 8, 0))),
-        Transform::from_xyz(0.0, 0.0, 0.0),
-        Collider::cuboid(50.0, 0.5, 50.0),
+        SceneRoot(asset_server.load("models/map/scene.gltf#Scene0")),
+        // 2. Automatically generate Convex Hull colliders for all mesh children
+        ColliderConstructorHierarchy::new(ColliderConstructor::TrimeshFromMesh),
+        Transform::from_xyz(0.0, -5.0, 0.0),
         RigidBody::Static,
-    ));
-
-    // light
-    cmds.spawn((
-        PointLight {
-            shadows_enabled: true,
-            ..default()
-        },
-        Transform::from_xyz(4.0, 8.0, 4.0),
     ));
 }
