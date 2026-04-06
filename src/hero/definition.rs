@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use avian3d::prelude::*;
+use avian3d::math::*;
 
 use crate::WantMove;
 use crate::hero;
@@ -61,5 +62,11 @@ pub fn spawn_hero(
             pitch: 0.0,
             yaw: 0.0,
         },
+        ShapeCaster::new(
+            Collider::capsule(0.49, 1.79),
+            Vector::ZERO,
+            Quaternion::default(),
+            Dir3::NEG_Y,
+        ).with_max_distance(0.15)
     ));
 }
