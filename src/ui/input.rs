@@ -36,6 +36,7 @@ fn play(
     cursor.visible = false;
     window.set_cursor_position(center);
 }
+
 /// Returns the center of the window.
 fn window_center(window: &Window) -> Vec2 {
     Vec2::new(window.width() / 2.0, window.height() / 2.0)

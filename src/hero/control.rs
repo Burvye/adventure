@@ -28,6 +28,7 @@ pub fn hero_input(
     }
 
     // store the forward direction to be used later on
+    // -Z is forward in bevy
     want_move.forward = Vec3::new(-hero.yaw.sin(), 0.0, -hero.yaw.cos());
 }
 
