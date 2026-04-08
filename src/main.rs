@@ -1,13 +1,28 @@
 mod hero;
 mod motion;
 mod build;
+mod cash_register;
 mod ui;
+
+use std::env;
 
 use bevy::prelude::*;
 use avian3d::prelude::*;
+use bevy::remote::http::DEFAULT_PORT;
+use bevy::remote::{ http::RemoteHttpPlugin, RemotePlugin };
 
 fn main() -> AppExit {
-    App::new().add_plugins((DefaultPlugins, MainPlugin)).run()
+    let port: u16 = env
+        ::args()
+        .nth(1)
+        .and_then(|arg| arg.parse().ok())
+        .unwrap_or(DEFAULT_PORT);
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .add_plugins(MainPlugin)
+        .add_plugins(RemotePlugin::default())
+        .add_plugins(RemoteHttpPlugin::default().with_port(port))
+        .run()
 }
 
 /// The bare minimum essential functions to run this game.

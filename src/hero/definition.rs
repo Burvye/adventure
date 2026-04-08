@@ -42,11 +42,7 @@ pub fn spawn_hero(
                 Camera3d::default(),
                 Transform::from_xyz(0.0, 1.6, 0.0),
                 children![
-                    (
-                        RayCaster::new(Vec3::ZERO, Dir3::NEG_Z),
-                        Transform::default(),
-                        DebugTool,
-                    ),
+                    (RayCaster::new(Vec3::ZERO, Dir3::NEG_Z), Transform::default(), DebugTool),
                     (
                         // arm
                         Mesh3d(mesh.add(Cuboid::new(0.5, 0.5, 0.5))),
@@ -66,7 +62,7 @@ pub fn spawn_hero(
                         Transform::default(),
                     )
                 ],
-            ),
+            )
             // (
             //     HeroBody,
             //     Mesh3d(mesh.add(Capsule3d::new(0.5, 1.8))),
@@ -74,7 +70,7 @@ pub fn spawn_hero(
             //     Transform::default(),
             // )
         ],
-        Transform::from_xyz(10.0, 2.0, 10.0),
+        Transform::from_xyz(10.0, 20.0, 10.0),
         Collider::capsule(0.5, 1.8),
         LockedAxes::ROTATION_LOCKED,
         RigidBody::Dynamic,

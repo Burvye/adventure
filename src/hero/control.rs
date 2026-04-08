@@ -10,6 +10,8 @@ use crate::hero::definition::HeroBody;
 use crate::motion::definition::WantMove;
 
 use crate::hero;
+use crate::cash_register;
+use crate::build;
 
 use trig_const::cos;
 
@@ -51,7 +53,9 @@ fn validate_jump(collisions: &ShapeHits) -> bool {
 
 /// Updates the player's stored rotation from mouse movement.
 pub fn read_camera(mot: Res<AccumulatedMouseMotion>, mut hero: Single<&mut Hero>) {
-    if hero.paused { return; }
+    if hero.paused {
+        return;
+    }
     hero.pitch = (hero.pitch - mot.delta.y * hero.sens.y).clamp(
         -(89.9_f32).to_radians(),
         (89.9_f32).to_radians()
@@ -70,26 +74,60 @@ pub fn update_camera(mut hcam: Single<&mut Transform, With<HeroCamera>>, hero: S
     hcam.rotation = Quat::from_euler(EulerRot::YXZ, hero.yaw, hero.pitch, 0.0);
 }
 
+// TODO: More modular detection for cash registers
 /// Detects when this instance left clicks.
 pub fn hero_left_click(
+    mut cmds: Commands,
+    mut mesh: ResMut<Assets<Mesh>>,
+    mut mats: ResMut<Assets<StandardMaterial>>,
     click: Res<ButtonInput<MouseButton>>,
     cast: Single<(&RayHits, &GlobalTransform), With<hero::definition::DebugTool>>,
-    myself: Single<Entity, With<Hero>>
+    myself: Single<Entity, With<Hero>>,
+    cash_register: Single<Entity, With<cash_register::definition::CashRegister>>
 ) {
     if click.just_pressed(MouseButton::Left) {
-        on_click(&cast.0, &cast.1, *myself);
+        on_click(&mut cmds, &mut mesh, &mut mats, &cast.0, &cast.1, *myself, *cash_register);
     }
 }
 /// Stuff to run when left clicks are detected.
-fn on_click(hits: &RayHits, loc: &GlobalTransform, myself: Entity) {
+fn on_click(
+    cmds: &mut Commands,
+    mesh: &mut ResMut<Assets<Mesh>>,
+    mats: &mut ResMut<Assets<StandardMaterial>>,
+    hits: &RayHits,
+    loc: &GlobalTransform,
+    myself: Entity,
+    cash_register: Entity
+) {
     // iterator that excludes myself
     let hit_non_self = hits.iter().find(|hit| hit.entity != myself);
 
-    match hit_non_self {
-        // prints out the data to bevy logger
-        Some(hit) => info!("Hit {:?}", loc.translation() + loc.forward() * hit.distance),
+    let hit_register = hits.iter().find(|hit| hit.entity == cash_register);
+
+    match hit_register {
+        Some(hit) => hit_register_function(),
         None => info!("Miss"),
     }
-    // this is Bevy's println
-    info!("Clicked!");
+    fn hit_register_function() {
+        info!("Hit a cash register!!!");
+    }
+
+    match hit_non_self {
+        // prints out the data to bevy logger
+        Some(hit) => {
+
+            let hit_position = loc.translation() + loc.forward() * hit.distance;
+
+            build::build_cube::physics_cube(
+                cmds,
+                mesh,
+                mats,
+                hit_position.x,
+                hit_position.y,
+                hit_position.z,
+            );
+            info!("Hit {:?}", hit_position);
+        }
+        None => info!("Miss"),
+    }
 }

@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use avian3d::prelude::*;
 
+/// Spawns a simple cube at the given coordinates.
 pub fn physics_cube(
     cmds: &mut Commands,
     mesh: &mut ResMut<Assets<Mesh>>,
