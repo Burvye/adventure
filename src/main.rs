@@ -19,6 +19,7 @@ impl Plugin for MainPlugin {
         app.add_systems(Startup, (build::build_world::build_lobby, ui::crosshair::spawn_crosshair)); // all world load stuff
         app.add_systems(Update, (
             hero::control::hero_input,
+            hero::control::hero_left_click,
             hero::control::read_camera,
             hero::control::update_body.after(hero::control::read_camera),
             hero::control::update_camera.after(hero::control::read_camera),

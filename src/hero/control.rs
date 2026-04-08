@@ -13,6 +13,7 @@ use trig_const::cos;
 
 /// The angle between the player and the ground that jumping should be possible at
 const VALID_JUMP_ANGLE: f64 = std::f64::consts::FRAC_PI_3;
+
 /// Valid jump angle but cosined
 const VALID_JUMP_ANGLE_COS: f32 = cos(VALID_JUMP_ANGLE) as f32;
 
@@ -63,4 +64,16 @@ pub fn update_body(mut hbod: Single<&mut Transform, With<HeroBody>>, hero: Singl
 pub fn update_camera(mut hcam: Single<&mut Transform, With<HeroCamera>>, hero: Single<&Hero>) {
     // actually apply transformation.
     hcam.rotation = Quat::from_euler(EulerRot::YXZ, hero.yaw, hero.pitch, 0.0);
+}
+
+pub fn hero_left_click(
+    click: Res<ButtonInput<MouseButton>>,
+) {
+    if click.just_pressed(MouseButton::Left) {
+        on_click();
+    }
+}
+fn on_click() {
+    // this is Bevy's println
+    info!("Clicked!")
 }

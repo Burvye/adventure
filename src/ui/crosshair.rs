@@ -29,7 +29,7 @@ pub fn spawn_crosshair(mut cmds: Commands) {
                 Crosshair,
             ),
             (
-                /// vertical tall bar
+                // vertical tall bar
                 Node {
                     position_type: PositionType::Absolute,
                     width: Val::Px(1.0),
