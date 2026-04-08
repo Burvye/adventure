@@ -26,6 +26,9 @@ pub struct HeroCamera;
 #[derive(Component)]
 pub struct HeroBody;
 
+#[derive(Component)]
+pub struct DebugTool;
+
 /// Quickly spawn a hero, Only spawn one please.
 pub fn spawn_hero(
     cmds: &mut Commands,
@@ -39,6 +42,11 @@ pub fn spawn_hero(
                 Camera3d::default(),
                 Transform::from_xyz(0.0, 1.6, 0.0),
                 children![
+                    (
+                        RayCaster::new(Vec3::ZERO, Dir3::NEG_Z),
+                        Transform::default(),
+                        DebugTool,
+                    ),
                     (
                         // arm
                         Mesh3d(meshes.add(Cuboid::new(0.5, 0.5, 0.5))),

@@ -9,6 +9,9 @@ use crate::hero::definition::HeroCamera;
 use crate::hero::definition::HeroBody;
 use crate::motion::definition::WantMove;
 
+use crate::hero;
+
+
 use trig_const::cos;
 
 /// The angle between the player and the ground that jumping should be possible at
@@ -66,14 +69,27 @@ pub fn update_camera(mut hcam: Single<&mut Transform, With<HeroCamera>>, hero: S
     hcam.rotation = Quat::from_euler(EulerRot::YXZ, hero.yaw, hero.pitch, 0.0);
 }
 
+/// Detects when this instance left clicks.
 pub fn hero_left_click(
     click: Res<ButtonInput<MouseButton>>,
+    cast: Single<(&RayHits, &GlobalTransform), With<hero::definition::DebugTool>>,
+    myself: Single<Entity, With<Hero>>,
 ) {
     if click.just_pressed(MouseButton::Left) {
-        on_click();
+        on_click(&cast.0, &cast.1, *myself);
     }
 }
-fn on_click() {
+/// Stuff to run when left clicks are detected.
+fn on_click(hits: &RayHits, loc: &GlobalTransform, myself: Entity) {
+    
+    // iterator that excludes myself
+    let hit_non_self = hits.iter().find(|hit| hit.entity != myself);
+
+    match hit_non_self {
+        // prints out the data to bevy logger
+        Some(hit) => info!("Hit {:?}", loc.translation() + loc.forward() * hit.distance),
+        None => info!("Miss"),
+    }
     // this is Bevy's println
-    info!("Clicked!")
+    info!("Clicked!");
 }
