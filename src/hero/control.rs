@@ -9,8 +9,12 @@ use crate::hero::definition::HeroCamera;
 use crate::hero::definition::HeroBody;
 use crate::motion::definition::WantMove;
 
+use trig_const::cos;
+
 /// The angle between the player and the ground that jumping should be possible at
-const VALID_JUMP_ANGLE: f32 = std::f32::consts::FRAC_PI_4;
+const VALID_JUMP_ANGLE: f64 = std::f64::consts::FRAC_PI_3;
+/// Valid jump angle but cosined
+const VALID_JUMP_ANGLE_COS: f32 = cos(VALID_JUMP_ANGLE) as f32;
 
 /// Reads the hero's input and sets where they want to move.
 pub fn hero_input(
@@ -23,7 +27,7 @@ pub fn hero_input(
     want_move.zinput = (keys.pressed(KeyW) as i8) - (keys.pressed(KeyS) as i8);
     want_move.xinput = (keys.pressed(KeyD) as i8) - (keys.pressed(KeyA) as i8);
 
-    if keys.just_pressed(Space) {
+    if keys.pressed(Space) {
         want_move.jump = validate_jump(collisions);
     }
 
@@ -38,7 +42,7 @@ fn validate_jump(collisions: &ShapeHits) -> bool {
     collisions.iter().any(|hit| {
         // hit.normal2 is negative to flip the normal around towards the player
         // normal2 is the ground, check if the normal is 45 degrees to player, then it is walkable
-        (-hit.normal2).angle_between(Vec3::Y) <= VALID_JUMP_ANGLE
+        -hit.normal2.y >= VALID_JUMP_ANGLE_COS
     })
 }
 

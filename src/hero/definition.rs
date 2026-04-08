@@ -38,22 +38,25 @@ pub fn spawn_hero(
                 HeroCamera,
                 Camera3d::default(),
                 Transform::from_xyz(0.0, 1.8, 0.0),
-                children![(
-                    Mesh3d(meshes.add(Cuboid::new(0.5, 0.5, 0.5))),
-                    MeshMaterial3d(materials.add(Color::srgb_u8(255, 55, 0))),
-                    Transform::from_xyz(1.0, 0.0, -2.0).looking_at(Vec3::Z, Vec3::Y),
-                ),
-                (
-                    SpotLight {
-                        inner_angle: 0.25,
-                        outer_angle: 0.5,
-                        range: 200.0,
-                        intensity: 5_000_000.0, // readible 5 million
-                        shadows_enabled: true,
-                        ..default()
-                    },
-                    Transform::default(),
-                )
+                children![
+                    (
+                        // arm
+                        Mesh3d(meshes.add(Cuboid::new(0.5, 0.5, 0.5))),
+                        MeshMaterial3d(materials.add(Color::srgb_u8(255, 55, 0))),
+                        Transform::from_xyz(1.0, 0.0, -2.0).looking_at(Vec3::Z, Vec3::Y),
+                    ),
+                    (
+                        // flashlight
+                        SpotLight {
+                            inner_angle: 0.25,
+                            outer_angle: 0.5,
+                            range: 200.0,
+                            intensity: 5_000_000.0, // readible 5 million
+                            shadows_enabled: true,
+                            ..default()
+                        },
+                        Transform::default(),
+                    )
                 ],
             ),
             (
@@ -67,7 +70,7 @@ pub fn spawn_hero(
         Collider::capsule(0.5, 1.8),
         LockedAxes::ROTATION_LOCKED,
         RigidBody::Dynamic,
-        WantMove { zinput: 0, xinput: 0, jump: false, forward: Vec3::ZERO },
+        WantMove { zinput: 0, xinput: 0, jump: false, forward: Vec3::ZERO, move_speed: 10.0 },
         hero::definition::Hero {
             paused: true,
             sens: Vec2 { x: 0.01, y: 0.01 },
@@ -78,7 +81,7 @@ pub fn spawn_hero(
             Collider::capsule(0.49, 1.79),
             Vector::ZERO,
             Quaternion::default(),
-            Dir3::NEG_Y,
-        ).with_max_distance(0.15)
+            Dir3::NEG_Y
+        ).with_max_distance(0.15),
     ));
 }
