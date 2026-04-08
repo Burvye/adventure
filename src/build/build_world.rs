@@ -7,14 +7,23 @@ use crate::build;
 /// Construct the default environment to spawn in
 pub fn build_lobby(
     mut cmds: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-    asset_server: Res<AssetServer>,
+    mut mesh: ResMut<Assets<Mesh>>,
+    mut mats: ResMut<Assets<StandardMaterial>>,
+    asset_server: Res<AssetServer>
 ) {
     // "hero"
-    hero::definition::spawn_hero(&mut cmds, &mut meshes, &mut materials);
-    
-    build::build_cube::physics_cube(&mut cmds, &mut meshes, &mut materials);
+    hero::definition::spawn_hero(&mut cmds, &mut mesh, &mut mats);
+
+    build::build_cube::physics_cube(&mut cmds, &mut mesh, &mut mats, 2.0, -3.0, 22.0);
+
+    cmds.spawn((
+        Mesh3d(mesh.add(Cuboid::new(1.25, 0.5, 1.0))),
+        MeshMaterial3d(mats.add(Color::srgb_u8(255, 60, 26))),
+        Transform::from_xyz(4.5, -3.0, 23.0),
+        Collider::cuboid(1.25, 0.5, 1.0),
+        RigidBody::Static,
+    ));
+    // TODO: Build a cash register at 4.5, -3, 23
 
     // fps map
     cmds.spawn((

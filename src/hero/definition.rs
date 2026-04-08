@@ -32,8 +32,8 @@ pub struct DebugTool;
 /// Quickly spawn a hero, Only spawn one please.
 pub fn spawn_hero(
     cmds: &mut Commands,
-    meshes: &mut ResMut<Assets<Mesh>>,
-    materials: &mut ResMut<Assets<StandardMaterial>>
+    mesh: &mut ResMut<Assets<Mesh>>,
+    mats: &mut ResMut<Assets<StandardMaterial>>
 ) {
     cmds.spawn((
         children![
@@ -49,8 +49,8 @@ pub fn spawn_hero(
                     ),
                     (
                         // arm
-                        Mesh3d(meshes.add(Cuboid::new(0.5, 0.5, 0.5))),
-                        MeshMaterial3d(materials.add(Color::srgb_u8(255, 55, 0))),
+                        Mesh3d(mesh.add(Cuboid::new(0.5, 0.5, 0.5))),
+                        MeshMaterial3d(mats.add(Color::srgb_u8(255, 55, 0))),
                         Transform::from_xyz(1.0, 0.0, -2.0).looking_at(Vec3::Z, Vec3::Y),
                     ),
                     (
@@ -67,12 +67,12 @@ pub fn spawn_hero(
                     )
                 ],
             ),
-            (
-                HeroBody,
-                Mesh3d(meshes.add(Capsule3d::new(0.5, 1.8))),
-                MeshMaterial3d(materials.add(Color::srgb_u8(255, 55, 0))),
-                Transform::default(),
-            )
+            // (
+            //     HeroBody,
+            //     Mesh3d(mesh.add(Capsule3d::new(0.5, 1.8))),
+            //     MeshMaterial3d(mats.add(Color::srgb_u8(255, 55, 0))),
+            //     Transform::default(),
+            // )
         ],
         Transform::from_xyz(10.0, 2.0, 10.0),
         Collider::capsule(0.5, 1.8),

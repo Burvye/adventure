@@ -11,7 +11,6 @@ use crate::motion::definition::WantMove;
 
 use crate::hero;
 
-
 use trig_const::cos;
 
 /// The angle between the player and the ground that jumping should be possible at
@@ -23,7 +22,7 @@ const VALID_JUMP_ANGLE_COS: f32 = cos(VALID_JUMP_ANGLE) as f32;
 /// Reads the hero's input and sets where they want to move.
 pub fn hero_input(
     keys: Res<ButtonInput<KeyCode>>,
-    mut hero: Single<(&mut Hero, &mut WantMove, &ShapeHits), With<Hero>>,
+    mut hero: Single<(&mut Hero, &mut WantMove, &ShapeHits), With<Hero>>
 ) {
     // tuple destructuring, this does not create side-effects
     let (hero, want_move, collisions) = &mut *hero;
@@ -52,10 +51,12 @@ fn validate_jump(collisions: &ShapeHits) -> bool {
 
 /// Updates the player's stored rotation from mouse movement.
 pub fn read_camera(mot: Res<AccumulatedMouseMotion>, mut hero: Single<&mut Hero>) {
-    hero.pitch = (hero.pitch - mot.delta.y * hero.sens.y)
-        .clamp(-(89.9_f32).to_radians(), (89.9_f32).to_radians());
-    hero.yaw = (hero.yaw - mot.delta.x * hero.sens.x)
-        .rem_euclid(std::f32::consts::TAU);
+    if hero.paused { return; }
+    hero.pitch = (hero.pitch - mot.delta.y * hero.sens.y).clamp(
+        -(89.9_f32).to_radians(),
+        (89.9_f32).to_radians()
+    );
+    hero.yaw = (hero.yaw - mot.delta.x * hero.sens.x).rem_euclid(std::f32::consts::TAU);
 }
 
 /// Applies stored rotation to the body yaw of the hero.
@@ -73,7 +74,7 @@ pub fn update_camera(mut hcam: Single<&mut Transform, With<HeroCamera>>, hero: S
 pub fn hero_left_click(
     click: Res<ButtonInput<MouseButton>>,
     cast: Single<(&RayHits, &GlobalTransform), With<hero::definition::DebugTool>>,
-    myself: Single<Entity, With<Hero>>,
+    myself: Single<Entity, With<Hero>>
 ) {
     if click.just_pressed(MouseButton::Left) {
         on_click(&cast.0, &cast.1, *myself);
@@ -81,7 +82,6 @@ pub fn hero_left_click(
 }
 /// Stuff to run when left clicks are detected.
 fn on_click(hits: &RayHits, loc: &GlobalTransform, myself: Entity) {
-    
     // iterator that excludes myself
     let hit_non_self = hits.iter().find(|hit| hit.entity != myself);
 
