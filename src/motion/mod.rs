@@ -1,2 +1,2 @@
-pub mod movement;
+pub mod logic;
 pub mod definition;

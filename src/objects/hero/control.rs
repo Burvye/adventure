@@ -1,3 +1,5 @@
+use crate::hero::logic;
+
 use bevy::prelude::*;
 use bevy::prelude::KeyCode::{ KeyW, KeyA, KeyS, KeyD, Space };
 use bevy::input::mouse::AccumulatedMouseMotion;
@@ -51,6 +53,17 @@ fn validate_jump(collisions: &ShapeHits) -> bool {
     })
 }
 
+/// Detects when this instance left clicks.
+pub fn hero_left_click(
+    click: Res<ButtonInput<MouseButton>>,
+    cast: Single<&RayHits, With<hero::definition::DebugTool>>,
+    interacts: Query<&objects::definition::Interaction>
+) {
+    if click.just_pressed(MouseButton::Left) {
+        logic::on_click(&cast, &interacts);
+    }
+}
+
 /// Updates the player's stored rotation from mouse movement.
 pub fn read_camera(mot: Res<AccumulatedMouseMotion>, mut hero: Single<&mut Hero>) {
     if hero.paused {
@@ -72,36 +85,4 @@ pub fn update_body(mut hbod: Single<&mut Transform, With<HeroBody>>, hero: Singl
 pub fn update_camera(mut hcam: Single<&mut Transform, With<HeroCamera>>, hero: Single<&Hero>) {
     // actually apply transformation.
     hcam.rotation = Quat::from_euler(EulerRot::YXZ, hero.yaw, hero.pitch, 0.0);
-}
-
-/// Detects when this instance left clicks.
-pub fn hero_left_click(
-    click: Res<ButtonInput<MouseButton>>,
-    cast: Single<&RayHits, With<hero::definition::DebugTool>>,
-    interacts: Query<&objects::definition::Interaction>,
-) {
-    if click.just_pressed(MouseButton::Left) {
-        on_click(&cast, &interacts);
-    }
-}
-/// Stuff to run when left clicks are detected.
-fn on_click(
-    hits: &RayHits,
-    interacts: &Query<&objects::definition::Interaction>,
-) {
-
-    for hit in hits.iter() {
-        match interacts.get(hit.entity) {
-            Ok(interact) => handle_interact(interact),
-            Err(_) => {},
-        }
-    }
-}
-/// Matches interactions to desired behaviors.
-fn handle_interact(interact: &objects::definition::Interaction) {
-    match interact {
-        objects::definition::Interaction::CashRegister => {
-            info!("Cash Register!");
-        }
-    }
 }

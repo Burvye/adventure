@@ -45,22 +45,22 @@ pub fn spawn_hero(
                     (RayCaster::new(Vec3::ZERO, Dir3::NEG_Z), Transform::default(), DebugTool),
                     (
                         // arm
-                        Mesh3d(mesh.add(Cuboid::new(0.5, 0.5, 0.5))),
+                        Mesh3d(mesh.add(Cuboid::new(0.5, 0.5, 2.0))),
                         MeshMaterial3d(mats.add(Color::srgb_u8(255, 55, 0))),
-                        Transform::from_xyz(1.0, 0.0, -2.0).looking_at(Vec3::Z, Vec3::Y),
+                        Transform::from_xyz(1.0, -1.0, -2.0).looking_at(Vec3::Z, Vec3::Y),
                     ),
-                    (
-                        // flashlight
-                        SpotLight {
-                            inner_angle: 0.25,
-                            outer_angle: 0.5,
-                            range: 200.0,
-                            intensity: 5_000_000.0, // readible 5 million
-                            shadows_enabled: true,
-                            ..default()
-                        },
-                        Transform::default(),
-                    )
+                    // (
+                    //     // flashlight
+                    //     SpotLight {
+                    //         inner_angle: 0.25,
+                    //         outer_angle: 0.5,
+                    //         range: 200.0,
+                    //         intensity: 5_000_000.0, // readible 5 million
+                    //         shadows_enabled: true,
+                    //         ..default()
+                    //     },
+                    //     Transform::default(),
+                    // )
                 ],
             )
             // (

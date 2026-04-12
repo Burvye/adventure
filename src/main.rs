@@ -47,7 +47,7 @@ impl Plugin for MainPlugin {
             hero::control::update_body.after(hero::control::read_camera),
             hero::control::update_camera.after(hero::control::read_camera),
             ui::input::toggle_pause,
-            motion::movement::move_all,
+            motion::logic::move_all,
         ));
     }
 }
