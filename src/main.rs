@@ -1,12 +1,14 @@
-mod hero;
 mod objects;
 mod motion;
 mod build;
-mod cash_register;
 mod ui;
-mod ferris;
+
+use crate::objects::ferris;
+use crate::objects::hero;
+use crate::objects::cash_register;
 
 use std::env;
+
 
 use bevy::prelude::*;
 use avian3d::prelude::*;

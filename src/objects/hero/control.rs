@@ -4,9 +4,9 @@ use bevy::input::mouse::AccumulatedMouseMotion;
 
 use avian3d::prelude::*;
 
-use crate::hero::definition::Hero;
-use crate::hero::definition::HeroCamera;
-use crate::hero::definition::HeroBody;
+use crate::objects::hero::definition::Hero;
+use crate::objects::hero::definition::HeroCamera;
+use crate::objects::hero::definition::HeroBody;
 use crate::motion::definition::WantMove;
 
 use crate::hero;
