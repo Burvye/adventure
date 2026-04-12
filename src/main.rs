@@ -1,8 +1,10 @@
 mod hero;
+mod objects;
 mod motion;
 mod build;
 mod cash_register;
 mod ui;
+mod ferris;
 
 use std::env;
 
@@ -31,9 +33,13 @@ impl Plugin for MainPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(PhysicsPlugins::default());
         app.insert_resource(Gravity(Vec3::NEG_Y * 30.0));
-        app.add_systems(Startup, (build::build_world::build_lobby, ui::crosshair::spawn_crosshair)); // all world load stuff
+        app.add_systems(Startup, (
+            build::build_world::build_lobby,
+            ui::crosshair::spawn_crosshair,
+            ferris::definition::spawn_ferris,
+        )); // all world load stuff
         app.add_systems(Update, (
-            hero::control::hero_input,
+            hero::control::hero_input, // paramount importance
             hero::control::hero_left_click,
             hero::control::read_camera,
             hero::control::update_body.after(hero::control::read_camera),

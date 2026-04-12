@@ -70,7 +70,7 @@ pub fn spawn_hero(
             //     Transform::default(),
             // )
         ],
-        Transform::from_xyz(10.0, 20.0, 10.0),
+        Transform::from_xyz(0.0, 67.0, 0.0),
         Collider::capsule(0.5, 1.8),
         LockedAxes::ROTATION_LOCKED,
         RigidBody::Dynamic,

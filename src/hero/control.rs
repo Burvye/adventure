@@ -10,8 +10,8 @@ use crate::hero::definition::HeroBody;
 use crate::motion::definition::WantMove;
 
 use crate::hero;
-use crate::cash_register;
-use crate::build;
+
+use crate::objects;
 
 use trig_const::cos;
 
@@ -74,60 +74,34 @@ pub fn update_camera(mut hcam: Single<&mut Transform, With<HeroCamera>>, hero: S
     hcam.rotation = Quat::from_euler(EulerRot::YXZ, hero.yaw, hero.pitch, 0.0);
 }
 
-// TODO: More modular detection for cash registers
 /// Detects when this instance left clicks.
 pub fn hero_left_click(
-    mut cmds: Commands,
-    mut mesh: ResMut<Assets<Mesh>>,
-    mut mats: ResMut<Assets<StandardMaterial>>,
     click: Res<ButtonInput<MouseButton>>,
-    cast: Single<(&RayHits, &GlobalTransform), With<hero::definition::DebugTool>>,
-    myself: Single<Entity, With<Hero>>,
-    cash_register: Single<Entity, With<cash_register::definition::CashRegister>>
+    cast: Single<&RayHits, With<hero::definition::DebugTool>>,
+    interacts: Query<&objects::definition::Interaction>,
 ) {
     if click.just_pressed(MouseButton::Left) {
-        on_click(&mut cmds, &mut mesh, &mut mats, &cast.0, &cast.1, *myself, *cash_register);
+        on_click(&cast, &interacts);
     }
 }
 /// Stuff to run when left clicks are detected.
 fn on_click(
-    cmds: &mut Commands,
-    mesh: &mut ResMut<Assets<Mesh>>,
-    mats: &mut ResMut<Assets<StandardMaterial>>,
     hits: &RayHits,
-    loc: &GlobalTransform,
-    myself: Entity,
-    cash_register: Entity
+    interacts: &Query<&objects::definition::Interaction>,
 ) {
-    // iterator that excludes myself
-    let hit_non_self = hits.iter().find(|hit| hit.entity != myself);
 
-    let hit_register = hits.iter().find(|hit| hit.entity == cash_register);
-
-    match hit_register {
-        Some(hit) => hit_register_function(),
-        None => info!("Miss"),
-    }
-    fn hit_register_function() {
-        info!("Hit a cash register!!!");
-    }
-
-    match hit_non_self {
-        // prints out the data to bevy logger
-        Some(hit) => {
-
-            let hit_position = loc.translation() + loc.forward() * hit.distance;
-
-            build::build_cube::physics_cube(
-                cmds,
-                mesh,
-                mats,
-                hit_position.x,
-                hit_position.y,
-                hit_position.z,
-            );
-            info!("Hit {:?}", hit_position);
+    for hit in hits.iter() {
+        match interacts.get(hit.entity) {
+            Ok(interact) => handle_interact(interact),
+            Err(_) => {},
         }
-        None => info!("Miss"),
+    }
+}
+/// Matches interactions to desired behaviors.
+fn handle_interact(interact: &objects::definition::Interaction) {
+    match interact {
+        objects::definition::Interaction::CashRegister => {
+            info!("Cash Register!");
+        }
     }
 }
