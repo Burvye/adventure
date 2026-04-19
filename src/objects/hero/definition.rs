@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use avian3d::prelude::*;
 use avian3d::math::*;
 
-use crate::motion::definition::WantMove;
+use crate::almighty::definition::WantMove;
 use crate::hero;
 
 /// A tag to identify the singular hero. Every player is a hero in their own instance.

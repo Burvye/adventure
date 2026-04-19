@@ -9,7 +9,7 @@ use avian3d::prelude::*;
 use crate::objects::hero::definition::Hero;
 use crate::objects::hero::definition::HeroCamera;
 use crate::objects::hero::definition::HeroBody;
-use crate::motion::definition::WantMove;
+use crate::almighty::definition::WantMove;
 
 use crate::hero;
 
@@ -57,10 +57,12 @@ fn validate_jump(collisions: &ShapeHits) -> bool {
 pub fn hero_left_click(
     click: Res<ButtonInput<MouseButton>>,
     cast: Single<&RayHits, With<hero::definition::DebugTool>>,
-    interacts: Query<&objects::definition::Interaction>
+    interacts: Query<&objects::definition::Thing>,
+    children_q: Query<&Children>,
+    mut visibles: Query<&mut objects::definition::Visible>
 ) {
     if click.just_pressed(MouseButton::Left) {
-        logic::on_click(&cast, &interacts);
+        logic::on_click(&cast, &interacts, &children_q, &mut visibles);
     }
 }
 

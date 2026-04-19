@@ -1,5 +1,5 @@
 mod objects;
-mod motion;
+mod almighty;
 mod build;
 mod ui;
 
@@ -47,7 +47,8 @@ impl Plugin for MainPlugin {
             hero::control::update_body.after(hero::control::read_camera),
             hero::control::update_camera.after(hero::control::read_camera),
             ui::input::toggle_pause,
-            motion::logic::move_all,
+            almighty::logic::update_visibilities,
+            almighty::logic::move_all,
         ));
     }
 }
