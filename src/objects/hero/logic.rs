@@ -11,14 +11,16 @@ pub fn on_click(
     children: &Query<&Children>,
     visibles: &mut Query<&mut objects::definition::Visible>
 ) {
-    if let Some(hit) = hits.iter().next() {
+    // more idiomatic way to check for hits
+    for hit in hits.iter() {
         if let Ok(thing) = interacts.get(hit.entity) {
             match thing {
                 objects::definition::Thing::CashRegister => {
                     toggle_light(hit.entity, children, visibles);
                 }
             }
+            // break on the first valid collision
+            break;
         }
     }
 }
-

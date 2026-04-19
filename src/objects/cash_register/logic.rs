@@ -6,6 +6,7 @@ pub fn toggle_light(
     children: &Query<&Children>,
     visibles: &mut Query<&mut objects::definition::Visible>
 ) {
+    info!("Light Toggled");
     let Ok(childs) = children.get(register) else {
         return;
     };
