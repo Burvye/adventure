@@ -4,6 +4,7 @@ use avian3d::math::*;
 
 use crate::almighty::definition::WantMove;
 use crate::hero;
+use crate::objects;
 
 /// A tag to identify the singular hero. Every player is a hero in their own instance.
 /// There should never be more than one hero. Everyone else is not a hero.
@@ -48,7 +49,7 @@ pub fn spawn_hero(
                         Mesh3d(mesh.add(Cuboid::new(0.5, 0.5, 2.0))),
                         MeshMaterial3d(mats.add(Color::srgb_u8(255, 55, 0))),
                         Transform::from_xyz(1.0, -1.0, -2.0).looking_at(Vec3::Z, Vec3::Y),
-                    ),
+                    )
                     // (
                     //     // flashlight
                     //     SpotLight {
@@ -74,6 +75,7 @@ pub fn spawn_hero(
         Collider::capsule(0.5, 1.8),
         LockedAxes::ROTATION_LOCKED,
         RigidBody::Dynamic,
+        objects::definition::Target,
         WantMove { zinput: 0, xinput: 0, jump: false, forward: Vec3::ZERO, move_speed: 10.0 },
         hero::definition::Hero {
             paused: true,

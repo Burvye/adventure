@@ -2,7 +2,9 @@ use bevy::prelude::*;
 use avian3d::prelude::*;
 use crate::objects;
 
-use crate::cash_register::logic::toggle_light;
+use crate::cash_register;
+use crate::objects::ferris;
+use crate::objects::definition::Thing;
 
 /// Stuff to run when left clicks are detected.
 pub fn on_click(
@@ -15,8 +17,16 @@ pub fn on_click(
     for hit in hits.iter() {
         if let Ok(thing) = interacts.get(hit.entity) {
             match thing {
-                objects::definition::Thing::CashRegister => {
-                    toggle_light(hit.entity, children, visibles);
+                Thing::CashRegister => {
+                    cash_register::logic::toggle_light(hit.entity, children, visibles);
+                },
+                Thing::Ferris => {
+                    // TODO: Add Ferris logic here
+                    ferris::logic::click_ferris();
+                    info!("Hit Ferris");
+                }
+                _ => {
+                    info!("Hit something else");
                 }
             }
             // break on the first valid collision

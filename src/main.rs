@@ -46,6 +46,7 @@ impl Plugin for MainPlugin {
             hero::control::read_camera,
             hero::control::update_body.after(hero::control::read_camera),
             hero::control::update_camera.after(hero::control::read_camera),
+            ferris::logic::update_ferris, // ferris logic
             ui::input::toggle_pause,
             almighty::logic::update_visibilities,
             almighty::logic::move_all,
