@@ -72,6 +72,7 @@ pub fn spawn_hero(
             // )
         ],
         Transform::from_xyz(0.0, 67.0, 0.0),
+        Visibility::default(),
         Collider::capsule(0.5, 1.8),
         LockedAxes::ROTATION_LOCKED,
         RigidBody::Dynamic,

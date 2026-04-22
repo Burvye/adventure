@@ -24,6 +24,7 @@ pub fn build_lobby(
         SceneRoot(asset_server.load("models/map/worlde.glb#Scene0")),
         ColliderConstructorHierarchy::new(ColliderConstructor::TrimeshFromMesh),
         Transform::from_xyz(0.0, 0.0, 0.0),
+        Visibility::default(),
         RigidBody::Static,
     ));
 }

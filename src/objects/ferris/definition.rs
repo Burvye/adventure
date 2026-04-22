@@ -9,6 +9,7 @@ pub fn spawn_ferris(mut cmds: Commands, asset_server: Res<AssetServer>) {
         SceneRoot(asset_server.load("models/crab.glb#Scene0")),
         ColliderConstructorHierarchy::new(ColliderConstructor::ConvexHullFromMesh),
         Transform::from_xyz(0.0, 20.0, 0.0).with_scale(Vec3::new(0.1, 0.1, 0.1)),
+        Visibility::default(),
         RigidBody::Dynamic,
         WantMove {
             zinput: 0,
