@@ -11,6 +11,10 @@ use std::env;
 
 
 use bevy::prelude::*;
+use bevy::render::{
+    settings::{Backends, WgpuSettings, WgpuSettingsPriority},
+    RenderPlugin,
+};
 use avian3d::prelude::*;
 use bevy::remote::http::DEFAULT_PORT;
 use bevy::remote::{ http::RemoteHttpPlugin, RemotePlugin };
@@ -21,8 +25,21 @@ fn main() -> AppExit {
         .nth(1)
         .and_then(|arg| arg.parse().ok())
         .unwrap_or(DEFAULT_PORT);
+
+    // AMD's current Windows driver stack is more stable here when Bevy uses
+    // Vulkan with compatibility-oriented limits instead of the default auto
+    // backend selection.
+    let default_plugins = DefaultPlugins.set(RenderPlugin {
+        render_creation: WgpuSettings {
+            backends: Some(Backends::VULKAN),
+            priority: WgpuSettingsPriority::Compatibility,
+            ..default()
+        }.into(),
+        ..default()
+    });
+
     App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(default_plugins)
         .add_plugins(MainPlugin)
         .add_plugins(RemotePlugin::default())
         .add_plugins(RemoteHttpPlugin::default().with_port(port))
@@ -38,7 +55,7 @@ impl Plugin for MainPlugin {
         app.add_systems(Startup, (
             build::build_world::build_lobby,
             ui::crosshair::spawn_crosshair,
-            ferris::definition::spawn_ferris,
+            ferris::definition::spawn_ferrises,
         )); // all world load stuff
         app.add_systems(Update, (
             hero::control::hero_input, // paramount importance
