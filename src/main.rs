@@ -9,12 +9,8 @@ use crate::objects::cash_register;
 
 use std::env;
 
-
 use bevy::prelude::*;
-use bevy::render::{
-    settings::{Backends, WgpuSettings, WgpuSettingsPriority},
-    RenderPlugin,
-};
+use bevy::render::{ settings::{ Backends, WgpuSettings, WgpuSettingsPriority }, RenderPlugin };
 use avian3d::prelude::*;
 use bevy::remote::http::DEFAULT_PORT;
 use bevy::remote::{ http::RemoteHttpPlugin, RemotePlugin };
@@ -30,11 +26,11 @@ fn main() -> AppExit {
     // Vulkan with compatibility-oriented limits instead of the default auto
     // backend selection.
     let default_plugins = DefaultPlugins.set(RenderPlugin {
-        render_creation: WgpuSettings {
+        render_creation: (WgpuSettings {
             backends: Some(Backends::VULKAN),
             priority: WgpuSettingsPriority::Compatibility,
             ..default()
-        }.into(),
+        }).into(),
         ..default()
     });
 
@@ -52,11 +48,8 @@ impl Plugin for MainPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(PhysicsPlugins::default());
         app.insert_resource(Gravity(Vec3::NEG_Y * 30.0));
-        app.add_systems(Startup, (
-            build::build_world::build_lobby,
-            ui::crosshair::spawn_crosshair,
-            ferris::definition::spawn_ferrises,
-        )); // all world load stuff
+        app.add_systems(Startup, (build::build_world::build_lobby, ui::crosshair::spawn_crosshair));
+        app.add_observer(ferris::definition::spawn_ferrises);
         app.add_systems(Update, (
             hero::control::hero_input, // paramount importance
             hero::control::hero_left_click,

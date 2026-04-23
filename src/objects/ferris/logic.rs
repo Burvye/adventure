@@ -8,7 +8,7 @@ pub fn update_ferris(
     targets: Query<&Transform, With<objects::definition::Target>>,
 ) {
     // for each ferris
-    for (mut ferris_transform, mut want_move) in &mut ferrises {
+    for (ferris_transform, mut want_move) in &mut ferrises {
         let Some(target_transform) = targets.iter().min_by(|target_a, target_b| {
             ferris_transform
                 .translation
@@ -31,8 +31,8 @@ pub fn update_ferris(
         }
         direction.y = 0.0;
 
-        ferris_transform.look_to(direction, Vec3::Y); // look at them
-        ferris_transform.rotate_y(std::f32::consts::PI); // rotate 180
+        // ferris_transform.look_to(direction, Vec3::Y); // look at them
+        // ferris_transform.rotate_y(std::f32::consts::PI); // rotate 180
 
         if direction.length_squared() <= 2.0 {
             want_move.zinput = 0;

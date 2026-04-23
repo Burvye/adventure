@@ -55,6 +55,7 @@ fn validate_jump(collisions: &ShapeHits) -> bool {
 
 /// Detects when this instance left clicks.
 pub fn hero_left_click(
+    mut cmds: Commands,
     click: Res<ButtonInput<MouseButton>>,
     cast: Single<&RayHits, With<hero::definition::DebugTool>>,
     interacts: Query<&objects::definition::Thing>,
@@ -62,7 +63,7 @@ pub fn hero_left_click(
     mut visibles: Query<&mut objects::definition::Visible>
 ) {
     if click.just_pressed(MouseButton::Left) {
-        logic::on_click(&cast, &interacts, &children_q, &mut visibles);
+        logic::on_click(&cast, &mut cmds, &interacts, &children_q, &mut visibles);
     }
 }
 
