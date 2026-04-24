@@ -23,14 +23,11 @@ pub fn on_click(
                     cmds.trigger(ferris::definition::SpawnFerrisesEvent);
                 },
                 Thing::Ferris => {
-                    // TODO: Add Ferris logic here
-                    ferris::logic::click_ferris();
+                    // pass in the hit entity into click ferris
+                    ferris::logic::click_ferris(hit.entity, cmds);
                     info!("Hit Ferris");
                 }
-                _ => {
-                    info!("Hit something else");
-                }
-            }
+            }   
             // break on the first valid collision
             break;
         }

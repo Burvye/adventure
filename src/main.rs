@@ -15,6 +15,8 @@ use avian3d::prelude::*;
 use bevy::remote::http::DEFAULT_PORT;
 use bevy::remote::{ http::RemoteHttpPlugin, RemotePlugin };
 
+use bevy_embedded_assets::EmbeddedAssetPlugin;
+
 fn main() -> AppExit {
     let port: u16 = env
         ::args()
@@ -35,7 +37,13 @@ fn main() -> AppExit {
     });
 
     App::new()
-        .add_plugins(default_plugins)
+        // `ReplaceDefault` only works when this plugin is added before Bevy's `AssetPlugin`.
+        .add_plugins((
+            EmbeddedAssetPlugin {
+                mode: bevy_embedded_assets::PluginMode::ReplaceDefault,
+            },
+            default_plugins,
+        ))
         .add_plugins(MainPlugin)
         .add_plugins(RemotePlugin::default())
         .add_plugins(RemoteHttpPlugin::default().with_port(port))

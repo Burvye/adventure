@@ -27,4 +27,12 @@ pub fn build_lobby(
         Visibility::default(),
         RigidBody::Static,
     ));
+
+    cmds.spawn((
+        SceneRoot(asset_server.load("models/map/grassyground.glb#Scene0")),
+        ColliderConstructorHierarchy::new(ColliderConstructor::TrimeshFromMesh),
+        Transform::from_xyz(0.0, 0.0, 100.0),
+        Visibility::default(),
+        RigidBody::Static,
+    ));
 }

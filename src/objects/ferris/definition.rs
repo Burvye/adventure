@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 use avian3d::prelude::*;
+use avian3d::math::*;
 
+use crate::objects;
 use crate::almighty::definition::WantMove;
 
 #[derive(Event)]
@@ -13,6 +15,7 @@ pub fn spawn_ferris(cmds: &mut Commands, asset_server: &Res<AssetServer>) {
         Transform::from_xyz(0.0, 20.0, 0.0).with_scale(Vec3::new(0.1, 0.1, 0.1)),
         Visibility::default(),
         RigidBody::Dynamic,
+        objects::definition::Thing::Ferris,
         WantMove {
             zinput: 0,
             xinput: 0,
@@ -20,6 +23,12 @@ pub fn spawn_ferris(cmds: &mut Commands, asset_server: &Res<AssetServer>) {
             forward: Vec3::Z,
             move_speed: 3.0,
         },
+        ShapeCaster::new(
+            Collider::capsule(1.5, 3.0),
+            Vector::ZERO,
+            Quaternion::default(),
+            Dir3::NEG_Y
+        ).with_max_distance(0.15),
     ));
 }
 

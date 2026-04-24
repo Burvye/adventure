@@ -10,18 +10,11 @@ use crate::objects::hero::definition::Hero;
 use crate::objects::hero::definition::HeroCamera;
 use crate::objects::hero::definition::HeroBody;
 use crate::almighty::definition::WantMove;
+use crate::almighty;
 
 use crate::hero;
 
 use crate::objects;
-
-use trig_const::cos;
-
-/// The angle between the player and the ground that jumping should be possible at
-const VALID_JUMP_ANGLE: f64 = std::f64::consts::FRAC_PI_3;
-
-/// Valid jump angle but cosined
-const VALID_JUMP_ANGLE_COS: f32 = cos(VALID_JUMP_ANGLE) as f32;
 
 /// Reads the hero's input and sets where they want to move.
 pub fn hero_input(
@@ -35,22 +28,12 @@ pub fn hero_input(
     want_move.xinput = (keys.pressed(KeyD) as i8) - (keys.pressed(KeyA) as i8);
 
     if keys.pressed(Space) {
-        want_move.jump = validate_jump(collisions);
+        want_move.jump = almighty::logic::validate_jump(collisions);
     }
 
     // store the forward direction to be used later on
     // -Z is forward in bevy
     want_move.forward = Vec3::new(-hero.yaw.sin(), 0.0, -hero.yaw.cos());
-}
-
-/// Returns true if the collision list you passed in implies that you can jump.
-fn validate_jump(collisions: &ShapeHits) -> bool {
-    // iterate through the collisions list and find any valid hit, returns boolean
-    collisions.iter().any(|hit| {
-        // hit.normal2 is negative to flip the normal around towards the player
-        // normal2 is the ground, check if the normal is 45 degrees to player, then it is walkable
-        -hit.normal2.y >= VALID_JUMP_ANGLE_COS
-    })
 }
 
 /// Detects when this instance left clicks.
