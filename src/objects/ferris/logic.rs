@@ -1,14 +1,16 @@
 use bevy::prelude::*;
+use avian3d::prelude::*;
 
 use crate::{almighty::definition::WantMove, objects};
+use crate::almighty;
 
 /// Move Ferrises
 pub fn update_ferris(
-    mut ferrises: Query<(&mut Transform, &mut WantMove), Without<objects::definition::Target>>,
+    mut ferrises: Query<(&mut Transform, &mut WantMove, &ShapeHits), Without<objects::definition::Target>>,
     targets: Query<&Transform, With<objects::definition::Target>>,
 ) {
     // for each ferris
-    for (mut ferris_transform, mut want_move) in &mut ferrises {
+    for (mut ferris_transform, mut want_move, collisions) in &mut ferrises {
         let Some(target_transform) = targets.iter().min_by(|target_a, target_b| {
             ferris_transform
                 .translation
@@ -25,8 +27,8 @@ pub fn update_ferris(
         };
 
         let mut direction = target_transform.translation - ferris_transform.translation;
-        // Ferris jump!
-        if direction.y > 2.0 {
+        // Ferris jump, with jump validation
+        if direction.y > 2.0 && almighty::logic::validate_jump(collisions) {
             want_move.jump = true;
         }
         direction.y = 0.0;
