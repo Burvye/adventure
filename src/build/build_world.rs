@@ -1,21 +1,21 @@
-use bevy::prelude::*;
 use avian3d::prelude::*;
+use bevy::prelude::*;
 
-use crate::hero;
 use crate::build;
 use crate::cash_register;
+use crate::hero;
 
 /// Construct the default environment to spawn in.
 pub fn build_lobby(
     mut cmds: Commands,
     mut mesh: ResMut<Assets<Mesh>>,
     mut mats: ResMut<Assets<StandardMaterial>>,
-    asset_server: Res<AssetServer>
+    asset_server: Res<AssetServer>,
 ) {
     // "hero"
     hero::definition::spawn_hero(&mut cmds, &mut mesh, &mut mats);
 
-    build::build_cube::physics_cube(&mut cmds, &mut mesh, &mut mats, 2.0, 3.0, 22.0);
+    build::build_cube::spawn_physics_cube_at(&mut cmds, &mut mesh, &mut mats, 2.0, 3.0, 22.0);
 
     cash_register::definition::build_cash_register(&mut cmds, &asset_server);
 

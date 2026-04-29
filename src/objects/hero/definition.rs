@@ -1,6 +1,6 @@
-use bevy::prelude::*;
-use avian3d::prelude::*;
 use avian3d::math::*;
+use avian3d::prelude::*;
+use bevy::prelude::*;
 
 use crate::almighty::definition::WantMove;
 use crate::hero;
@@ -34,7 +34,7 @@ pub struct DebugTool;
 pub fn spawn_hero(
     cmds: &mut Commands,
     mesh: &mut ResMut<Assets<Mesh>>,
-    mats: &mut ResMut<Assets<StandardMaterial>>
+    mats: &mut ResMut<Assets<StandardMaterial>>,
 ) {
     cmds.spawn((
         children![
@@ -43,33 +43,35 @@ pub fn spawn_hero(
                 Camera3d::default(),
                 Transform::from_xyz(0.0, 1.6, 0.0),
                 children![
-                    (RayCaster::new(Vec3::ZERO, Dir3::NEG_Z), Transform::default(), DebugTool),
+                    (
+                        RayCaster::new(Vec3::ZERO, Dir3::NEG_Z),
+                        Transform::default(),
+                        DebugTool
+                    ),
                     (
                         // arm
                         Mesh3d(mesh.add(Cuboid::new(0.5, 0.5, 2.0))),
                         MeshMaterial3d(mats.add(Color::srgb_u8(255, 55, 0))),
                         Transform::from_xyz(1.0, -1.0, -2.0).looking_at(Vec3::Z, Vec3::Y),
-                    )
-                    // (
-                    //     // flashlight
-                    //     SpotLight {
-                    //         inner_angle: 0.25,
-                    //         outer_angle: 0.5,
-                    //         range: 200.0,
-                    //         intensity: 5_000_000.0, // readible 5 million
-                    //         shadows_enabled: true,
-                    //         ..default()
-                    //     },
-                    //     Transform::default(),
-                    // )
+                    ) // (
+                      //     // flashlight
+                      //     SpotLight {
+                      //         inner_angle: 0.25,
+                      //         outer_angle: 0.5,
+                      //         range: 200.0,
+                      //         intensity: 5_000_000.0, // readible 5 million
+                      //         shadows_enabled: true,
+                      //         ..default()
+                      //     },
+                      //     Transform::default(),
+                      // )
                 ],
-            )
-            // (
-            //     HeroBody,
-            //     Mesh3d(mesh.add(Capsule3d::new(0.5, 1.8))),
-            //     MeshMaterial3d(mats.add(Color::srgb_u8(255, 55, 0))),
-            //     Transform::default(),
-            // )
+            ) // (
+              //     HeroBody,
+              //     Mesh3d(mesh.add(Capsule3d::new(0.5, 1.8))),
+              //     MeshMaterial3d(mats.add(Color::srgb_u8(255, 55, 0))),
+              //     Transform::default(),
+              // )
         ],
         Transform::from_xyz(0.0, 67.0, 0.0),
         Visibility::default(),
@@ -77,7 +79,13 @@ pub fn spawn_hero(
         LockedAxes::ROTATION_LOCKED,
         RigidBody::Dynamic,
         objects::definition::Target,
-        WantMove { zinput: 0, xinput: 0, jump: false, forward: Vec3::ZERO, move_speed: 10.0 },
+        WantMove {
+            zinput: 0,
+            xinput: 0,
+            jump: false,
+            forward: Vec3::ZERO,
+            move_speed: 10.0,
+        },
         hero::definition::Hero {
             paused: true,
             sens: Vec2 { x: 0.01, y: 0.01 },
@@ -88,7 +96,8 @@ pub fn spawn_hero(
             Collider::capsule(0.49, 1.79),
             Vector::ZERO,
             Quaternion::default(),
-            Dir3::NEG_Y
-        ).with_max_distance(0.15),
+            Dir3::NEG_Y,
+        )
+        .with_max_distance(0.15),
     ));
 }

@@ -1,9 +1,9 @@
-use bevy::prelude::*;
-use avian3d::prelude::*;
 use avian3d::math::*;
+use avian3d::prelude::*;
+use bevy::prelude::*;
 
-use crate::objects;
 use crate::almighty::definition::WantMove;
+use crate::objects;
 
 #[derive(Event)]
 pub struct SpawnFerrisesEvent;
@@ -27,15 +27,16 @@ pub fn spawn_ferris(cmds: &mut Commands, asset_server: &Res<AssetServer>) {
             Collider::capsule(1.5, 3.0),
             Vector::ZERO,
             Quaternion::default(),
-            Dir3::NEG_Y
-        ).with_max_distance(0.15),
+            Dir3::NEG_Y,
+        )
+        .with_max_distance(0.15),
     ));
 }
 
 pub fn spawn_ferrises(
     _event: On<SpawnFerrisesEvent>,
     mut cmds: Commands,
-    asset_server: Res<AssetServer>
+    asset_server: Res<AssetServer>,
 ) {
     for _ in 0..=25 {
         spawn_ferris(&mut cmds, &asset_server);

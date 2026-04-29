@@ -1,16 +1,16 @@
 use crate::hero::logic;
 
-use bevy::prelude::*;
-use bevy::prelude::KeyCode::{ KeyW, KeyA, KeyS, KeyD, Space };
 use bevy::input::mouse::AccumulatedMouseMotion;
+use bevy::prelude::KeyCode::{KeyA, KeyD, KeyS, KeyW, Space};
+use bevy::prelude::*;
 
 use avian3d::prelude::*;
 
-use crate::objects::hero::definition::Hero;
-use crate::objects::hero::definition::HeroCamera;
-use crate::objects::hero::definition::HeroBody;
-use crate::almighty::definition::WantMove;
 use crate::almighty;
+use crate::almighty::definition::WantMove;
+use crate::objects::hero::definition::Hero;
+use crate::objects::hero::definition::HeroBody;
+use crate::objects::hero::definition::HeroCamera;
 
 use crate::hero;
 
@@ -19,7 +19,7 @@ use crate::objects;
 /// Reads the hero's input and sets where they want to move.
 pub fn hero_input(
     keys: Res<ButtonInput<KeyCode>>,
-    mut hero: Single<(&mut Hero, &mut WantMove, &ShapeHits), With<Hero>>
+    mut hero: Single<(&mut Hero, &mut WantMove, &ShapeHits), With<Hero>>,
 ) {
     // tuple destructuring, this does not create side-effects
     let (hero, want_move, collisions) = &mut *hero;
@@ -40,13 +40,14 @@ pub fn hero_input(
 pub fn hero_left_click(
     mut cmds: Commands,
     click: Res<ButtonInput<MouseButton>>,
-    cast: Single<&RayHits, With<hero::definition::DebugTool>>,
+    cast: Single<(&RayCaster, &RayHits), With<hero::definition::DebugTool>>,
     interacts: Query<&objects::definition::Thing>,
     children_q: Query<&Children>,
-    mut visibles: Query<&mut objects::definition::Visible>
+    mut visibles: Query<&mut objects::definition::Visible>,
 ) {
     if click.just_pressed(MouseButton::Left) {
-        logic::on_click(&cast, &mut cmds, &interacts, &children_q, &mut visibles);
+        let (ray, hits) = &*cast;
+        logic::on_click(ray, hits, &mut cmds, &interacts, &children_q, &mut visibles);
     }
 }
 
@@ -55,10 +56,8 @@ pub fn read_camera(mot: Res<AccumulatedMouseMotion>, mut hero: Single<&mut Hero>
     if hero.paused {
         return;
     }
-    hero.pitch = (hero.pitch - mot.delta.y * hero.sens.y).clamp(
-        -(89.9_f32).to_radians(),
-        (89.9_f32).to_radians()
-    );
+    hero.pitch = (hero.pitch - mot.delta.y * hero.sens.y)
+        .clamp(-(89.9_f32).to_radians(), (89.9_f32).to_radians());
     hero.yaw = (hero.yaw - mot.delta.x * hero.sens.x).rem_euclid(std::f32::consts::TAU);
 }
 
