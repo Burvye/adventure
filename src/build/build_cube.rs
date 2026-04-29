@@ -2,17 +2,15 @@ use avian3d::prelude::*;
 use bevy::prelude::*;
 
 /// Event to spawn a cube easily
-/// Just do 
+/// Just do
 #[derive(Event)]
 pub struct SpawnCubeEvent {
-    x: f32,
-    y: f32,
-    z: f32,
+    position: Vec3,
 }
 
 impl SpawnCubeEvent {
-    pub fn new(x: f32, y: f32, z: f32) -> Self {
-        Self { x, y, z }
+    pub fn new(position: Vec3) -> Self {
+        Self { position }
     }
 }
 
@@ -41,5 +39,12 @@ pub fn spawn_physics_cube(
     mut mesh: ResMut<Assets<Mesh>>,
     mut mats: ResMut<Assets<StandardMaterial>>,
 ) {
-    spawn_physics_cube_at(&mut cmds, &mut mesh, &mut mats, event.x, event.y, event.z);
+    spawn_physics_cube_at(
+        &mut cmds,
+        &mut mesh,
+        &mut mats,
+        event.position.x,
+        event.position.y,
+        event.position.z,
+    );
 }

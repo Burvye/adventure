@@ -32,9 +32,17 @@ pub fn on_click(
                 }
             }
         } else {
-            let impact = ray.global_origin() + *ray.global_direction() * hit.distance;
-            let spawn = impact + hit.normal + 1.0;
-            cmds.trigger(build_cube::SpawnCubeEvent::new(spawn.x, spawn.y, spawn.z))
+            cmds.trigger(build_cube::SpawnCubeEvent::new(spawn_loc(
+                get_impact(ray.global_origin(), ray.global_direction(), hit.distance),
+                hit.normal,
+                1.0,
+            )))
         }
     }
+}
+fn get_impact(origin: Vec3, direction: Dir3, distance: f32) -> Vec3 {
+    origin + direction * distance
+}
+fn spawn_loc(impact_pos: Vec3, normal: Vec3, added: f32) -> Vec3 {
+    impact_pos + normal * added
 }
