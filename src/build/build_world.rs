@@ -31,7 +31,7 @@ pub fn build_lobby(
     cmds.spawn((
         SceneRoot(asset_server.load("models/map/grassyground.glb#Scene0")),
         ColliderConstructorHierarchy::new(ColliderConstructor::TrimeshFromMesh),
-        Transform::from_xyz(0.0, 0.0, 100.0),
+        Transform::from_xyz(0.0, 0.0, 125.0),
         Visibility::default(),
         RigidBody::Static,
     ));

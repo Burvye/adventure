@@ -10,6 +10,8 @@ use crate::objects::cash_register;
 use std::env;
 
 use bevy::prelude::*;
+use bevy::window::WindowPlugin;
+use bevy::window::WindowResolution;
 use bevy::render::{ settings::{ Backends, WgpuSettings, WgpuSettingsPriority }, RenderPlugin };
 use avian3d::prelude::*;
 use bevy::remote::http::DEFAULT_PORT;
@@ -24,9 +26,6 @@ fn main() -> AppExit {
         .and_then(|arg| arg.parse().ok())
         .unwrap_or(DEFAULT_PORT);
 
-    // AMD's current Windows driver stack is more stable here when Bevy uses
-    // Vulkan with compatibility-oriented limits instead of the default auto
-    // backend selection.
     let default_plugins = DefaultPlugins.set(RenderPlugin {
         render_creation: (WgpuSettings {
             backends: Some(Backends::VULKAN),
@@ -34,10 +33,16 @@ fn main() -> AppExit {
             ..default()
         }).into(),
         ..default()
+    }).set(WindowPlugin {
+        primary_window: Some(Window {
+            resolution: WindowResolution::new(640, 360),
+            title: "My Bevy App".to_string(),
+            ..default()
+        }),
+        ..default()
     });
 
     App::new()
-        // `ReplaceDefault` only works when this plugin is added before Bevy's `AssetPlugin`.
         .add_plugins((
             EmbeddedAssetPlugin {
                 mode: bevy_embedded_assets::PluginMode::ReplaceDefault,
@@ -56,7 +61,10 @@ impl Plugin for MainPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(PhysicsPlugins::default());
         app.insert_resource(Gravity(Vec3::NEG_Y * 30.0));
-        app.add_systems(Startup, (build::build_world::build_lobby, ui::crosshair::spawn_crosshair));
+        app.add_systems(Startup, (
+            build::build_world::build_lobby,
+            ui::crosshair::spawn_crosshair,
+        ));
         app.add_observer(ferris::definition::spawn_ferrises);
         app.add_systems(Update, (
             hero::control::hero_input, // paramount importance
